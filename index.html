@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise for Sunita ✨</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Prompt:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #ff9a9e; --secondary: #fad0c4; --dark-bg: #1e1e2e; --gold: #ffd700;
+        }
+        body { margin: 0; padding: 0; font-family: 'Prompt', sans-serif; overflow-x: hidden; background-color: var(--dark-bg); color: white; }
+
+        /* --- 1. LOGIN SCREEN --- */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 1.5s ease;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px);
+            padding: 50px; border-radius: 30px; width: 320px; text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); border: 2px solid white;
+        }
+        .login-input { width: 100%; padding: 15px; border: none; border-radius: 50px; background: #f0f0f0; margin: 20px 0; text-align: center; outline: none; box-sizing: border-box; font-family: 'Prompt'; }
+        .login-btn { width: 100%; padding: 15px; border: none; border-radius: 50px; background: linear-gradient(45deg, var(--primary), #ff6b6b); color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+
+        /* --- 2. CAKE SCENE --- */
+        #cake-scene {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #2a2a3e 0%, #111 100%);
+            z-index: 8000; display: none; flex-direction: column; justify-content: center; align-items: center; gap: 25px; opacity: 0; transition: opacity 1s;
+        }
+        .text-glow { color: white; font-size: 1.6rem; font-weight: bold; text-shadow: 0 0 10px var(--gold); text-align: center; min-height: 4rem; }
+
+        .cake-container { position: relative; width: 250px; height: 220px; display: flex; justify-content: center; align-items: flex-end; }
+        .cake-body { position: relative; width: 200px; height: 160px; }
+        .plate { width: 260px; height: 15px; background: #ddd; border-radius: 10px; position: absolute; bottom: -15px; left: -30px; box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
+        .layer { position: absolute; width: 100%; height: 60px; border-radius: 15px; }
+        .l-bottom { bottom: 0; background: #8d6e63; }
+        .l-middle { bottom: 50px; background: #ffcc80; z-index: 2;}
+        .l-top { bottom: 100px; background: #ffab91; z-index: 3; height: 70px; border-radius: 20px 20px 15px 15px; }
+        .icing { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 4; }
+        .drip { background: #fff; width: 25px; height: 35px; border-radius: 0 0 15px 15px; position: absolute; top: 68px; }
+        .candle { width: 16px; height: 50px; background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ff4081 5px, #ff4081 10px); position: absolute; top: -50px; left: 92px; z-index: 5; border-radius: 4px; }
+        .flame { width: 16px; height: 30px; border-radius: 50% 50% 20% 20%; background: linear-gradient(#fff, #ffeb3b, #ff9800); position: absolute; top: -30px; left: 0; box-shadow: 0 0 20px #ffeb3b, 0 0 40px #ff9800; transform-origin: bottom center; animation: flicker 0.6s infinite alternate; }
+        @keyframes flicker { from {transform: scale(1) rotate(-2deg);} to {transform: scale(1.1) rotate(2deg); opacity: 0.9;} }
+        .popIn { animation: pop 1s forwards; }
+        @keyframes pop { from {transform: scale(0);} to {transform: scale(1);} }
+
+        #mic-btn { padding: 15px 40px; border-radius: 50px; border: none; background: linear-gradient(to right, #ffd700, #ffb300); color: #333; font-weight: bold; font-size: 1.2rem; cursor: pointer; display: none; transition: 0.3s; }
+        #mic-btn:hover { transform: scale(1.1); }
+
+        /* --- 3. MAIN CONTENT --- */
+        #main-content { display: none; opacity: 0; transition: opacity 2s; padding: 40px 20px; }
+        .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; opacity: 0.15; pointer-events: none; z-index: 0; }
+        
+        .profile-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; padding: 40px; width: 95%; max-width: 550px; z-index: 10; position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center;}
+        .profile-img { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 4px solid white; margin-bottom: 20px; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        
+        #typewriter { font-size: 1.1rem; line-height: 1.8; min-height: 100px; text-align: left; color: #fff; font-weight: 300; }
+        .cursor { display: inline-block; width: 3px; background: var(--primary); margin-left: 3px; animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* --- PHOTO SLIDESHOW (FIXED SQUARE) --- */
+        #photo-slideshow {
+            display: none; width: 100%; max-width: 400px; height: 400px; margin: 30px auto 0;
+            position: relative; overflow: hidden; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 3px solid rgba(255,255,255,0.2);
+        }
+        .slide-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0; transform: scale(1.1); transition: all 1.5s ease-in-out;
+        }
+        .slide-img.active { opacity: 1; transform: scale(1); }
+
+        .heart-float { position: absolute; color: var(--primary); pointer-events: none; z-index: 5; animation: flyUp 4s linear forwards; }
+        @keyframes flyUp { 0% { transform: translateY(100%) scale(0); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-500px) scale(1.5) translateX(40px); opacity: 0; } }
+
+        .countdown-box { display: flex; gap: 15px; margin-top: 40px; z-index: 10; flex-wrap: wrap; justify-content: center; }
+        .time-item { background: rgba(255,255,255,0.08); padding: 15px; border-radius: 15px; text-align: center; min-width: 75px; border: 1px solid rgba(255,255,255,0.1); }
+        .time-val { font-size: 1.8rem; font-weight: bold; color: var(--gold); display: block; }
+        .time-label { font-size: 0.8rem; opacity: 0.7; }
+
+    </style>
+</head>
+<body>
+    <div id="player-container" style="display:none;"></div>
+
+    <div id="login-screen">
+        <div class="login-card">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
+            <h2 style="color: #ff6b6b; font-family:'Nunito';">Login to My Heart</h2>
+            <input type="password" id="pass-input" class="login-input" placeholder="กรุณาใส่ชื่อของคุณ">
+            <button onclick="checkLogin()" class="login-btn">Unlock ❤️</button>
+            <p id="err-msg" style="color:red; display:none; margin-top:10px;">ชื่อไม่ถูกต้อง</p>
+        </div>
+    </div>
+
+    <div id="cake-scene">
+        <div id="msg-area"><div id="msg-text" class="text-glow"></div></div>
+        
+        <div class="cake-container" id="cake-box" style="visibility: hidden;">
+            <div class="cake-body">
+                <div class="plate"></div>
+                <div class="l-bottom layer"></div><div class="l-middle layer"></div><div class="l-top layer"></div>
+                <div class="icing"><div class="drip" style="left:20px;"></div><div class="drip" style="left:70px; height:45px;"></div><div class="drip" style="left:120px; height:25px;"></div><div class="drip" style="left:160px; height:35px;"></div></div>
+                <div class="candle"><div class="flame" id="flame"></div></div>
+            </div>
+        </div>
+
+        <div id="btn-area">
+            <button id="mic-btn" onclick="startMicrophone()">กดยอมรับพรก่อนค่อยเป่า </button>
+        </div>
+        <p id="mic-fallback" style="color:#aaa; font-size:0.8rem; display:none; cursor:pointer;" onclick="blowCandle()">[เป่าไม่ติด คลิกที่นี่]</p>
+    </div>
+
+    <div id="main-content">
+        <div class="stars"></div>
+        <div class="section">
+            <div class="profile-card" data-aos="zoom-in">
+                <div style="position:relative; display:inline-block;">
+                    <div style="position:absolute; top:-20px; right:-10px; font-size:2rem; animation:float 3s infinite;">👑</div>
+                    <img src="https://img2.pic.in.th/3a31b441be1dcb8e5.jpg" class="profile-img">
+                </div>
+                <h2 style="margin:5px 0; color: var(--primary);">Sunita Khamkoed</h2>
+                
+                <div id="typewriter"></div><span class="cursor" id="cursor"></span>
+
+                <div id="photo-slideshow">
+                    <img src="https://img5.pic.in.th/file/secure-sv1/12b9204b82b733a347.jpg" class="slide-img active">
+                    <img src="https://img5.pic.in.th/file/secure-sv1/11455c78990bd71cbc.jpg" class="slide-img">
+                    <img src="https://img2.pic.in.th/10b4d4c4d3d841e40d.jpg" class="slide-img">
+                    <img src="https://img2.pic.in.th/917a90416f86e35dd.jpg" class="slide-img">
+                    <img src="https://img5.pic.in.th/file/secure-sv1/846f5ecf62eda7057.jpg" class="slide-img">
+                    <img src="https://img2.pic.in.th/7afc90f81a44a0a48.jpg" class="slide-img">
+                    <img src="https://img5.pic.in.th/file/secure-sv1/6e10574eb74fe264e.jpg" class="slide-img">
+                    <img src="https://img2.pic.in.th/55c79bd57339b5131.jpg" class="slide-img">
+                    <img src="https://img5.pic.in.th/file/secure-sv1/4798f119a8a8bc206.jpg" class="slide-img">
+                    <img src="https://img5.pic.in.th/file/secure-sv1/2fbaacb8d39d06982.jpg" class="slide-img">
+                    <img src="https://img2.pic.in.th/16f47584efeae8403.jpg" class="slide-img">
+                </div>
+            </div>
+
+            <div class="countdown-box" data-aos="fade-up">
+                <div class="time-item"><span class="time-val" id="d">00</span><span class="time-label">Days</span></div>
+                <div class="time-item"><span class="time-val" id="h">00</span><span class="time-label">Hrs</span></div>
+                <div class="time-item"><span class="time-val" id="m">00</span><span class="time-label">Mins</span></div>
+                <div class="time-item"><span class="time-val" id="s">00</span><span class="time-label">Secs</span></div>
+            </div>
+            <p style="margin-top:15px; font-size:0.9rem; opacity:0.6;">Counting down to March 12 ✈️</p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        const password = "ermine"; 
+        const targetDate = new Date("March 12, 2026 00:00:00").getTime();
+        const youtubeID = "faccKGHl5jM";
+        const wishText = "Happy Birthday นะคะเจ้าของวันเกิด! เค้าภูมิใจในตัวหนูที่สุดเลยที่เก่งและอดทนอยู่ทางนั้นคนเดียวมาตลอด วันเกิดปีนี้พี่อาจจะไม่ได้ไปป้อนเค้ก หรือพาหนูไปเดินเล่นด้วยตัวเอง แต่เค้านับวันถอยหลังรอทุกวินาทีเลยนะ อีกแค่นิดเดียวเท่านั้นเราก็ได้เจอกันแล้ว\n\nขอให้วันเกิดปีนี้เป็นจุดเริ่มต้นของสิ่งดีๆ ในชีวิตหนูนะ คิดหวังอะไรก็ขอให้สมปรารถนาทุกอย่างเลย รีบเคลียร์งาน รีบแพ็กกระเป๋า แล้วรีบกลับมาหาเค้านะ ทะเลสวยๆ และของอร่อยกำลังรอเราอยู่ สัญญาว่าจะดูแลหนูให้ดีที่สุดเท่าที่เค้าจะทำได้เลย รักหนูมากนะคนดี ❤️";
+
+        function checkLogin() {
+            if(document.getElementById('pass-input').value === password) {
+                const loginScreen = document.getElementById('login-screen');
+                loginScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loginScreen.style.display = 'none';
+                    document.getElementById('cake-scene').style.display = 'flex';
+                    setTimeout(() => { document.getElementById('cake-scene').style.opacity = '1'; runCakeStory(); }, 100);
+                }, 1500);
+            } else { document.getElementById('err-msg').style.display = 'block'; }
+        }
+
+        function runCakeStory() {
+            playMusic();
+            const msg = document.getElementById('msg-text');
+            msg.innerText = "วันนี้วันอะไรเอ่ย จำได้ไหม 🤔";
+            setTimeout(() => {
+                msg.innerText = "วันเกิดหนูไง! 🎂";
+                const cake = document.getElementById('cake-box');
+                cake.style.visibility = 'visible'; cake.classList.add('popIn');
+            }, 5000);
+            setTimeout(() => { msg.innerText = "หลับตาลง... แล้วอธิษฐานนะ 🙏"; }, 6500);
+            setTimeout(() => {
+                msg.innerText = "พร้อมแล้ว... เป่าเทียนเลย! 💨";
+                document.getElementById('mic-btn').style.display = 'block';
+                document.getElementById('mic-fallback').style.display = 'block';
+            }, 12000); // หน่วงเวลาให้อธิษฐาน 5.5 วินาที
+        }
+
+        // MIC LOGIC
+        let audioContext, analyser, microphone, isBlowing = false;
+        function startMicrophone() {
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                audioContext = new AudioContext(); analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                microphone.connect(analyser); analyser.fftSize = 256;
+                document.getElementById('mic-btn').style.display = 'none';
+                detectBlow();
+            }).catch(e => { blowCandle(); });
+        }
+        function detectBlow() {
+            if(isBlowing) return;
+            const data = new Uint8Array(analyser.frequencyBinCount);
+            analyser.getByteFrequencyData(data);
+            let sum = 0; data.forEach(v => sum += v);
+            let avg = sum / data.length;
+            if(avg > 45) blowCandle(); else requestAnimationFrame(detectBlow);
+        }
+        function blowCandle() {
+            if(isBlowing) return; isBlowing = true;
+            document.getElementById('flame').style.opacity = '0';
+            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+            setTimeout(() => {
+                document.getElementById('cake-scene').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('cake-scene').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    setTimeout(() => { 
+                        document.getElementById('main-content').style.opacity = '1'; 
+                        document.body.style.overflow='auto'; AOS.init(); startTypewriter();
+                    }, 100);
+                }, 1000);
+            }, 2000);
+        }
+
+        // TYPEWRITER & SLIDESHOW
+        function startTypewriter() {
+            let i = 0;
+            const speed = 65; 
+            const container = document.getElementById('typewriter');
+            function type() {
+                if (i < wishText.length) {
+                    container.innerHTML += wishText.charAt(i) === "\n" ? "<br>" : wishText.charAt(i);
+                    i++;
+                    if(i % 8 === 0) createHeart();
+                    setTimeout(type, speed);
+                } else {
+                    document.getElementById('cursor').style.display = 'none';
+                    startSlideshow();
+                }
+            }
+            type();
+        }
+
+        function startSlideshow() {
+            const show = document.getElementById('photo-slideshow');
+            show.style.display = 'block';
+            let current = 0;
+            const images = document.querySelectorAll('.slide-img');
+            setInterval(() => {
+                images[current].classList.remove('active');
+                current = (current + 1) % images.length;
+                images[current].classList.add('active');
+                createHeart();
+            }, 3500);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('i');
+            heart.className = 'fas fa-heart heart-float';
+            heart.style.left = Math.random() * 90 + '%';
+            heart.style.bottom = '0';
+            heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
+            document.querySelector('.profile-card').appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 4000);
+        }
+
+        setInterval(() => {
+            const now = new Date().getTime(); const dist = targetDate - now;
+            if(dist < 0) return;
+            document.getElementById("d").innerText = Math.floor(dist / (1000*60*60*24));
+            document.getElementById("h").innerText = Math.floor((dist % (1000*60*60*24)) / (1000*60*60));
+            document.getElementById("m").innerText = Math.floor((dist % (1000*60*60)) / (1000*60));
+            document.getElementById("s").innerText = Math.floor((dist % (1000*60)) / 1000);
+        }, 1000);
+
+        var player;
+        function onYouTubeIframeAPIReady() { player = new YT.Player('player-container', { height: '0', width: '0', videoId: youtubeID, playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': youtubeID } }); }
+        function playMusic() { if(player && player.playVideo) player.playVideo(); }
+        var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    </script>
+</body>
+</html>
