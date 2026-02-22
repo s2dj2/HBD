@@ -16,7 +16,7 @@
         }
         body { margin: 0; padding: 0; font-family: 'Prompt', sans-serif; overflow-x: hidden; background-color: var(--dark-bg); color: white; }
 
-        /* --- LOGIN SCREEN --- */
+        /* --- 1. LOGIN SCREEN --- */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
@@ -31,7 +31,7 @@
         .login-input { width: 100%; padding: 15px; border: none; border-radius: 50px; background: #f0f0f0; margin: 20px 0; text-align: center; outline: none; box-sizing: border-box; font-family: 'Prompt';}
         .login-btn { width: 100%; padding: 15px; border: none; border-radius: 50px; background: linear-gradient(45deg, var(--primary), #ff6b6b); color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
 
-        /* --- CAKE SCENE --- */
+        /* --- 2. CAKE SCENE --- */
         #cake-scene {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at center, #2a2a3e 0%, #111 100%);
@@ -50,15 +50,15 @@
         .drip { background: #fff; width: 25px; height: 35px; border-radius: 0 0 15px 15px; position: absolute; top: 68px; }
         .candle { width: 16px; height: 50px; background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ff4081 5px, #ff4081 10px); position: absolute; top: -50px; left: 92px; z-index: 5; border-radius: 4px; }
         .flame { width: 16px; height: 30px; border-radius: 50% 50% 20% 20%; background: linear-gradient(#fff, #ffeb3b, #ff9800); position: absolute; top: -30px; left: 0; box-shadow: 0 0 20px #ffeb3b, 0 0 40px #ff9800; transform-origin: bottom center; animation: flicker 0.6s infinite alternate; }
-        @keyframes flicker { 0% {transform: scale(1) rotate(-2deg);} 100% {transform: scale(1.1) rotate(2deg); opacity: 0.9;} }
+        @keyframes flicker { from {transform: scale(1) rotate(-2deg);} to {transform: scale(1.1) rotate(2deg);} }
         .popIn { animation: pop 1s forwards; }
-        @keyframes pop { 0% {transform: scale(0);} 100% {transform: scale(1);} }
+        @keyframes pop { from {transform: scale(0);} to {transform: scale(1);} }
 
         #mic-btn { padding: 15px 40px; border-radius: 50px; border: none; background: linear-gradient(to right, #ffd700, #ffb300); color: #333; font-weight: bold; font-size: 1.2rem; cursor: pointer; display: none; }
 
-        /* --- MAIN CONTENT --- */
+        /* --- 3. MAIN CONTENT --- */
         #main-content { display: none; opacity: 0; transition: opacity 2s; padding: 40px 20px; }
-        .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        .section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; padding: 20px; }
         .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; opacity: 0.15; pointer-events: none; z-index: 0; }
         
         .profile-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; padding: 40px; width: 95%; max-width: 500px; z-index: 10; position: relative; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5); text-align: center; }
@@ -68,72 +68,30 @@
         .cursor { display: inline-block; width: 3px; background: var(--primary); margin-left: 3px; animation: blink 0.7s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        /* 🌟 NEW SPECTACULAR 3D POLAROID GALLERY 🌟 */
+        /* --- PHOTO SLIDESHOW (POLAROID) --- */
         #photo-slideshow {
-            display: none; 
-            width: 100%; 
-            height: 450px; 
-            margin-top: 30px;
-            position: relative; 
-            perspective: 1200px; /* สร้างมิติ 3D ให้ภาพ */
+            display: none; width: 100%; height: 450px; margin-top: 30px;
+            position: relative; perspective: 1200px;
         }
-
         .polaroid {
-            position: absolute; 
-            top: 0; left: 0; right: 0; bottom: 0;
-            margin: auto;
-            width: 90%; 
-            height: 90%; 
-            background: #fff;
-            padding: 15px 15px 65px 15px; /* เว้นพื้นที่ด้านล่างแบบโพลารอยด์ */
-            border-radius: 12px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px rgba(255, 154, 158, 0.2);
-            
-            /* ท่าเตรียมก่อนเข้าฉาก (หมุนและอยู่ไกล) */
-            opacity: 0; 
-            transform: translateZ(-300px) translateY(50px) rotate(-10deg); 
-            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1); /* เอฟเฟกต์เด้งสมูทๆ */
-            z-index: 1;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;
+            width: 90%; height: 90%; background: #fff; padding: 15px 15px 65px 15px;
+            border-radius: 12px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            opacity: 0; transform: translateZ(-300px) translateY(50px) rotate(-10deg);
+            transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1;
         }
+        .polaroid.active { opacity: 1; transform: translateZ(0) translateY(0) rotate(0deg); z-index: 10; }
+        .polaroid.exit { opacity: 0; transform: translateZ(100px) translateY(-150px) rotate(15deg) scale(1.1); z-index: 11; pointer-events: none; }
+        .polaroid img { width: 100%; height: 100%; object-fit: contain; background: #fdfbfb; border-radius: 5px; }
 
-        /* รูปที่กำลังแสดงผล (โผล่มาตรงกลาง) */
-        .polaroid.active { 
-            opacity: 1; 
-            transform: translateZ(0) translateY(0) rotate(0deg); 
-            z-index: 10; 
-        }
-
-        /* ท่าปลิวออกฉาก (ปลิวขึ้นบน) */
-        .polaroid.exit {
-            opacity: 0;
-            transform: translateZ(100px) translateY(-150px) rotate(15deg) scale(1.1);
-            z-index: 11;
-            pointer-events: none;
-        }
-
-        .polaroid img {
-            width: 100%; 
-            height: 100%; 
-            /* 👇 แก้ปัญหา "รูปไม่เต็ม" ให้แสดงเต็ม 100% ไม่มีตัดขอบ 👇 */
-            object-fit: contain; 
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* พื้นหลังสว่างละมุนๆ ถ้าเกิดช่องว่าง */
-            border-radius: 5px; 
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
-        }
-
-        /* ข้อความใต้รูปโพลารอยด์น่ารักๆ */
         .polaroid::after {
-            content: 'Our Memories ❤️';
-            position: absolute;
-            bottom: 18px; left: 0; width: 100%;
-            text-align: center; font-family: 'Nunito', sans-serif;
-            font-size: 1.5rem; font-weight: bold; color: #ff6b6b;
+            content: 'Our Memories ❤️'; position: absolute; bottom: 18px; left: 0; width: 100%;
+            text-align: center; font-family: 'Nunito', sans-serif; font-size: 1.5rem; font-weight: bold; color: #ff6b6b;
         }
         .polaroid:nth-child(2n)::after { content: 'So Cute ✨'; color: #ff9800; }
         .polaroid:nth-child(3n)::after { content: 'My Sunita 🌻'; color: #4caf50; }
         .polaroid:nth-child(4n)::after { content: 'Love You 💖'; color: #e91e63; }
 
-        /* Animation หัวใจ */
         .heart-float { position: absolute; color: var(--primary); pointer-events: none; z-index: 5; animation: flyUp 4s linear forwards; }
         @keyframes flyUp { 0% { transform: translateY(100%) scale(0) rotate(-10deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-400px) scale(1.5) rotate(20deg) translateX(30px); opacity: 0; } }
 
@@ -142,10 +100,19 @@
         .time-val { font-size: 1.5rem; font-weight: bold; color: var(--gold); display: block; }
         .time-label { font-size: 0.7rem; opacity: 0.7; }
 
+        /* 🎵 FIX MUSIC PLAYER ON MOBILE 🎵 */
+        #player-container {
+            position: absolute;
+            left: -9999px; /* ผลักออกนอกจอแทนการใช้ display:none */
+            top: 0;
+            width: 1px;
+            height: 1px;
+        }
+
     </style>
 </head>
 <body>
-    <div id="player-container" style="display:none;"></div>
+    <div id="player-container"></div>
 
     <div id="login-screen">
         <div class="login-card">
@@ -215,8 +182,12 @@
         const youtubeID = "faccKGHl5jM";
         const wishText = "Happy Birthday นะคะเจ้าของวันเกิด! เค้าภูมิใจในตัวหนูที่สุดเลยที่เก่งและอดทนอยู่ทางนั้นคนเดียวมาตลอด วันเกิดปีนี้พี่อาจจะไม่ได้ไปป้อนเค้ก หรือพาหนูไปเดินเล่นด้วยตัวเอง แต่เค้านับวันถอยหลังรอทุกวินาทีเลยนะ อีกแค่นิดเดียวเท่านั้นเราก็ได้เจอกันแล้ว\n\nขอให้วันเกิดปีนี้เป็นจุดเริ่มต้นของสิ่งดีๆ ในชีวิตหนูนะ คิดหวังอะไรก็ขอให้สมปรารถนาทุกอย่างเลย รีบเคลียร์งาน รีบแพ็กกระเป๋า แล้วรีบกลับมาหาเค้านะ ทะเลสวยๆ และของอร่อยกำลังรอเราอยู่ สัญญาว่าจะดูแลหนูให้ดีที่สุดเท่าที่เค้าจะทำได้เลย รักหนูมากนะคนดี ❤️";
 
+        // --- LOGIN & MUSIC PLAYBACK ---
         function checkLogin() {
             if(document.getElementById('pass-input').value === password) {
+                // พยายามเล่นเพลงทันทีที่มีการโต้ตอบ (ปุ่มกด)
+                playMusic();
+                
                 const loginScreen = document.getElementById('login-screen');
                 loginScreen.style.opacity = '0';
                 setTimeout(() => {
@@ -228,7 +199,6 @@
         }
 
         function runCakeStory() {
-            playMusic();
             const msg = document.getElementById('msg-text');
             msg.innerText = "วันนี้วันอะไรเอ่ย จำได้ไหม 🤔";
             setTimeout(() => {
@@ -244,7 +214,7 @@
             }, 12000);
         }
 
-        // MIC LOGIC
+        // --- MIC & BLOWING ---
         let audioContext, analyser, microphone, isBlowing = false;
         function startMicrophone() {
             navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
@@ -280,7 +250,7 @@
             }, 2000);
         }
 
-        // TYPEWRITER
+        // --- TYPEWRITER & SLIDESHOW ---
         function startTypewriter() {
             let i = 0;
             const speed = 65; 
@@ -293,38 +263,26 @@
                     setTimeout(type, speed);
                 } else {
                     document.getElementById('cursor').style.display = 'none';
-                    start3DSlideshow(); // พิมพ์จบเริ่มโชว์รูปโพลารอยด์
+                    start3DSlideshow();
                 }
             }
             type();
         }
 
-        // 🌟 NEW 3D SLIDESHOW LOGIC 🌟
         function start3DSlideshow() {
             const show = document.getElementById('photo-slideshow');
             show.style.display = 'block';
-            
             let current = 0;
             const images = document.querySelectorAll('.polaroid');
-            
             setInterval(() => {
-                // เอารูปปัจจุบัน "ปลิวออกไป"
                 images[current].classList.remove('active');
                 images[current].classList.add('exit');
-                
                 let prev = current;
-                
-                // เปลี่ยนเป็นรูปถัดไป
                 current = (current + 1) % images.length;
                 images[current].classList.add('active');
-                
-                // คืนค่ารูปร่างเดิมให้รูปที่ปลิวออกไปแล้ว (เพื่อรอวนกลับมาใหม่)
-                setTimeout(() => {
-                    images[prev].classList.remove('exit');
-                }, 1200);
-
+                setTimeout(() => { images[prev].classList.remove('exit'); }, 1200);
                 createHeart();
-            }, 4000); // โชว์รูปละ 4 วินาที
+            }, 4000);
         }
 
         function createHeart() {
@@ -337,6 +295,36 @@
             setTimeout(() => { heart.remove(); }, 4000);
         }
 
+        // --- YOUTUBE API HANDLING ---
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player-container', {
+                height: '1', width: '1',
+                videoId: youtubeID,
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': youtubeID,
+                    'playsinline': 1 // สำคัญมากสำหรับมือถือเพื่อให้เล่นในหน้าเว็บได้
+                },
+                events: {
+                    'onReady': function(e) {
+                        e.target.mute(); // ปิดเสียงไว้ก่อนเพื่อให้ระบบยอมให้เล่นเอง
+                    }
+                }
+            });
+        }
+
+        function playMusic() {
+            if (player && player.playVideo) {
+                player.playVideo();
+                player.unMute(); // เปิดเสียงทันทีที่เริ่มเล่น
+                player.setVolume(100);
+            }
+        }
+
+        // --- UTILS ---
         setInterval(() => {
             const now = new Date().getTime(); const dist = targetDate - now;
             if(dist < 0) return;
@@ -346,9 +334,6 @@
             document.getElementById("s").innerText = Math.floor((dist % (1000*60)) / 1000);
         }, 1000);
 
-        var player;
-        function onYouTubeIframeAPIReady() { player = new YT.Player('player-container', { height: '0', width: '0', videoId: youtubeID, playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': youtubeID } }); }
-        function playMusic() { if(player && player.playVideo) player.playVideo(); }
         var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     </script>
